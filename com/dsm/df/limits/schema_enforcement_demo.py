@@ -10,6 +10,7 @@ if __name__ == '__main__':
         .config('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:2.7.4') \
         .getOrCreate()
         # .master('local[*]') \
+    sc = spark.sparkContext
     spark.sparkContext.setLogLevel('ERROR')
 
     current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -30,10 +31,10 @@ if __name__ == '__main__':
 
     step = "overwrite"
     if step == "overwrite":
-        data = [
+        data = sc.parallelize([
             {"Brazil",  2011, 22.029},
             {"India", 2006, 24.73}
-          ] \
+          ]) \
           .toDF(["country", "year", "temperature"])
         data.printSchema()
         data.show()
