@@ -4,6 +4,11 @@ import os.path
 import yaml
 
 if __name__ == '__main__':
+
+    os.environ["PYSPARK_SUBMIT_ARGS"] = (
+        '--packages "io.delta:delta-core:0.6.0" pyspark-shell'
+    )
+
     current_dir = os.path.abspath(os.path.dirname(__file__))
     app_config_path = os.path.abspath(current_dir + "/../../../" + "application.yml")
     app_secrets_path = os.path.abspath(current_dir + "/../../../" + ".secrets")
