@@ -49,7 +49,7 @@ if __name__ == '__main__':
     delta_df.toDF().show()
 
     print("Updating 'temperature = 24.029' where country = 'Brazil' ..")
-    delta_df.updateExpr("country = 'Brazil'", {"temperature": "24.029"})
+    delta_df.update("country = 'Brazil'", {"temperature": "24.029"})
 
     print("Reading updated data,")
     delta_df.toDF().show()
