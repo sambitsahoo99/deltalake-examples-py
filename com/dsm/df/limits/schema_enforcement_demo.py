@@ -32,8 +32,8 @@ if __name__ == '__main__':
     step = "overwrite"
     if step == "overwrite":
         data = sc.parallelize([
-            {"Brazil",  2011, 22.029},
-            {"India", 2006, 24.73}
+            ("Brazil",  2011, 22.029),
+            ("India", 2006, 24.73)
           ]) \
           .toDF("country", "year", "temperature")
         data.printSchema()
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     elif step == "append":
         new_data = sc.parallelize([
-                {"Australia", 2019.0, 30.0}
+            ("Australia", 2019.0, 30.0)
             ]) \
             .toDF("country", "year", "temperature")
         new_data.printSchema()
