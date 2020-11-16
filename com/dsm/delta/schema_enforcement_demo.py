@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-import io.delta.tables.DeltaTable
+from delta.tables import *
 import os.path
 import yaml
 
@@ -24,7 +24,8 @@ if __name__ == '__main__':
         .config("spark.hadoop.fs.s3a.access.key", app_secret["s3_conf"]["access_key"]) \
         .config("spark.hadoop.fs.s3a.secret.key", app_secret["s3_conf"]["secret_access_key"]) \
         .getOrCreate()
-        # .master('local[*]') \
+
+    sc = spark.sparkContext
     spark.sparkContext.setLogLevel('ERROR')
 
     current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -43,12 +44,12 @@ if __name__ == '__main__':
 
     delta_table_path = "s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/schema_enforcement_delta"
 
-    step = "append"
+    step = "overwrite"
     if step == "overwrite":
-        data = [
-            {"Brazil",  2011, 22.029},
-            {"India", 2006, 24.73}
-          ] \
+        data = sc.parallelize([
+            ("Brazil",  2011, 22.029),
+            ("India", 2006, 24.73)
+          ]) \
           .toDF(["country", "year", "temperature"])
         data.printSchema()
         data.show()
@@ -65,9 +66,10 @@ if __name__ == '__main__':
         DeltaTable.forPath(spark, delta_table_path).toDF.show()
 
     elif step == "append":
-        new_data = [
-            {"Australia", 2019.0, 30.0}
-        ].toDF(["country", "year", "temperature"])
+        new_data = sc.parallelize([
+            ("Australia", 2019.0, 30.0)
+            ]) \
+            .toDF(["country", "year", "temperature"])
         new_data.printSchema()
         new_data.show()
         print("Writing data..")

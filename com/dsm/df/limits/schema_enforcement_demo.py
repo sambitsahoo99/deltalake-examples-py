@@ -9,7 +9,7 @@ if __name__ == '__main__':
         .appName("Read Files") \
         .config('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:2.7.4') \
         .getOrCreate()
-        # .master('local[*]') \
+
     sc = spark.sparkContext
     spark.sparkContext.setLogLevel('ERROR')
 
