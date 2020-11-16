@@ -44,39 +44,12 @@ if __name__ == '__main__':
 
     delta_table_path = "s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/schema_enforcement_delta"
 
-    step = "overwrite"
-    if step == "overwrite":
-        data = sc.parallelize([
-            ("Brazil",  2011, 22.029),
-            ("India", 2006, 24.73)
-          ]) \
-          .toDF(["country", "year", "temperature"])
-        data.printSchema()
-        data.show()
-        print("Writing data..")
-        data \
-            .coalesce(1) \
-            .write \
-            .format("delta") \
-            .mode("overwrite") \
-            .save(delta_table_path)
-        print("Write completed!")
+    print("Reading data,")
+    delta_df = DeltaTable.forPath(spark, delta_table_path)
+    delta_df.toDF().show()
 
-        print("Reading data,")
-        DeltaTable.forPath(spark, delta_table_path).toDF().show()
+    print("Deleting record where country = 'India' ..")
+    delta_df.delete("country = 'India'")
 
-    elif step == "append":
-        new_data = sc.parallelize([
-            ("Australia", 2019.0, 30.0)
-            ]) \
-            .toDF(["country", "year", "temperature"])
-        new_data.printSchema()
-        new_data.show()
-        print("Writing data..")
-        new_data \
-            .write \
-            .format("delta") \
-            .mode("append") \
-            .save(delta_table_path)
-
-# spark-submit --packages "org.apache.hadoop:hadoop-aws:2.7.4,io.delta:delta-core_2.11:0.6.0" com/dsm/delta/schema_enforcement_demo.py
+    print("Reading updated data,")
+    delta_df.toDF().show()
