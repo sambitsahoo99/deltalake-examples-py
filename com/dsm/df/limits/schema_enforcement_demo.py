@@ -35,7 +35,7 @@ if __name__ == '__main__':
             {"Brazil",  2011, 22.029},
             {"India", 2006, 24.73}
           ]) \
-          .toDF(["country", "year", "temperature"])
+          .toDF("country", "year", "temperature")
         data.printSchema()
         data.show()
         print("Writing data..")
@@ -50,9 +50,10 @@ if __name__ == '__main__':
         spark.read.parquet(df_path).show()
 
     elif step == "append":
-        new_data = [
-            {"Australia", 2019.0, 30.0}
-        ].toDF("country", "year", "temperature")
+        new_data = sc.parallelize([
+                {"Australia", 2019.0, 30.0}
+            ]) \
+            .toDF("country", "year", "temperature")
         new_data.printSchema()
         new_data.show()
         print("Writing data..")
