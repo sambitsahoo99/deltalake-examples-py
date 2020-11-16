@@ -47,7 +47,7 @@ if __name__ == '__main__':
     step = "all_versions"
 
     if step == "all_versions":
-        delta_df = DeltaTable.forPath(spark, deltaTablePath)
+        delta_df = DeltaTable.forPath(spark, delta_table_path)
         delta_df \
             .history() \
             .orderBy("version") \
@@ -61,3 +61,4 @@ if __name__ == '__main__':
           .load(delta_table_path) \
           .show()
 
+# spark-submit --packages "org.apache.hadoop:hadoop-aws:2.7.4,io.delta:delta-core_2.11:0.6.0" com/dsm/delta/time_travel_demo.py
