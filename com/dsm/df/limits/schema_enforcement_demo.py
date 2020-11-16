@@ -40,10 +40,10 @@ if __name__ == '__main__':
         data.show()
         print("Writing data..")
         data \
-          .coalesce(1) \
-          .write.format("parquet") \
-          .mode("overwrite") \
-          .save(df_path)
+            .coalesce(1) \
+            .write.format("parquet") \
+            .mode("overwrite") \
+            .save(df_path)
         print("Write completed!")
 
         print("Reading data,")
