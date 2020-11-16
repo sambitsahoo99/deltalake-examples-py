@@ -53,3 +53,5 @@ if __name__ == '__main__':
 
     print("Reading updated data,")
     delta_df.toDF().show()
+
+# spark-submit --packages "org.apache.hadoop:hadoop-aws:2.7.4,io.delta:delta-core_2.11:0.6.0" com/dsm/delta/delete_demo.py
