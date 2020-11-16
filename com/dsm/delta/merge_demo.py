@@ -71,9 +71,10 @@ if __name__ == '__main__':
 
         print("Merging them both for matching country and year,")
         delta_merge_df.alias("delta_merge") \
-            .merge(updates_df.alias("updates"), "delta_merge.country = updates.country and delta_merge.year = updates.year") \
-            .whenMatchedUpdate(set={"temperature": "updates.temperature"}) \
-            .whenNotMatchedInsert(values={"country": "updates.country", "year": "updates.year", "temperature": "updates.temperature"}) \
+            .merge(updates_df.alias("updates"),
+                   "delta_merge.country = updates.country and delta_merge.year = updates.year") \
+            .whenMatchedUpdate({"temperature": "updates.temperature"}) \
+            .whenNotMatchedInsert({"country": "updates.country", "year": "updates.year", "temperature": "updates.temperature"}) \
             .execute()
 
         delta_merge_df.toDF().show()
