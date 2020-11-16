@@ -17,7 +17,7 @@ if __name__ == '__main__':
     spark = SparkSession \
         .builder \
         .appName("Read Files") \
-        .config('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:2.7.4') \
+        .config('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:2.7.4,io.delta:delta-core:0.6.0') \
         .config("spark.databricks.delta.retentionDurationCheck.enabled", "false") \
         .config("spark.delta.logStore.class", "org.apache.spark.sql.delta.storage.S3SingleDriverLogStore") \
         .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
@@ -78,3 +78,5 @@ if __name__ == '__main__':
             .format("delta") \
             .mode("append") \
             .save(delta_table_path)
+
+# spark-submit --packages "org.apache.hadoop:hadoop-aws:2.7.4,io.delta:delta-core:0.6.0" com/dsm/delta/schema_enforcement_demo.py
